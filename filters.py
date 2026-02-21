@@ -55,8 +55,18 @@ def is_safe(reply: str) -> bool:
         return False
 
 
-def sanitize_reply(reply: Optional[str]) -> str:
+def sanitize_reply(reply: Optional[str], contact_type: str = "mom") -> str:
     try:
+        if contact_type == "friend":
+            # Looser rules for friend replies
+            if not reply:
+                return "ey busy unna, talk later"
+            r = re.sub(r"\s+", " ", reply.strip())
+            if len(r) > 300:
+                return "ey busy unna, talk later"
+            return r
+
+        # strict rules for mom (default)
         if not reply:
             return SAFE_FALLBACK
         r = re.sub(r"\s+", " ", reply.strip())
@@ -64,9 +74,9 @@ def sanitize_reply(reply: Optional[str]) -> str:
         if r.endswith("?"):
             r = r.rstrip("?")
             r = r.strip()
-        if not is_safe(r):
-            return SAFE_FALLBACK
-        return r
+        if is_safe(r):
+            return r
+        return SAFE_FALLBACK
     except Exception:
         logging.exception("sanitize_reply error: %s", traceback.format_exc())
         return SAFE_FALLBACK

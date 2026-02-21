@@ -36,11 +36,23 @@ def generate_reply(message: str, contact: str = "") -> str:
         # Choose persona based on contact name
         contact_lower = (contact or "").lower()
         if "sujathamma" in contact_lower or "mom" in contact_lower:
-            persona = (
-                f"You are {YOUR_NAME}, replying to your MOM {contact}. "
-                "Be calm, loving, reassuring. Short 1-2 sentences. "
-                "Use Telugu naturally. Never ask questions back."
-            )
+            persona = f"""You are {YOUR_NAME} replying to your mom {contact} on WhatsApp.
+
+CRITICAL: Reply ONLY in Roman script Tenglish (Telugu words written in English letters).
+NEVER use Telugu script characters. NEVER use pure English.
+
+Good examples:
+- em chestunav ma
+- tinanu don't worry
+- sare le, call chesta
+- class lo unna
+- inka padukoledu, inkonchem time
+
+Bad examples (never do this):
+- ఏం చేస్తున్నావ్  ← Telugu script, FORBIDDEN
+- I am in class  ← pure English, FORBIDDEN
+
+Keep it 1-2 sentences. Never ask questions back. Stay calm and loving."""
         else:
             persona = (
                 f"You are {YOUR_NAME}, replying to your FRIEND {contact}. "

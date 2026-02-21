@@ -57,17 +57,19 @@ def main():
                         continue
 
                     reply = generate_reply(text, contact=contact)
-                    reply = sanitize_reply(reply)
+                    contact_type = "mom" if "sujathamma" in contact.lower() or "mom" in contact.lower() else "friend"
+                    safe_reply = sanitize_reply(reply, contact_type=contact_type)
 
-                    if not is_safe(reply):
+                    # For mom, double-check safety; friends use looser rules already
+                    if contact_type == "mom" and not is_safe(safe_reply):
                         logging.info("Reply not safe; using fallback for %s", contact)
-                        reply = "phone was on silent <3"
+                        safe_reply = "phone was on silent <3"
 
-                    sent = send_message(driver, reply)
+                    sent = send_message(driver, safe_reply)
                     if sent:
                         mark_replied(msg_id, text)
 
-                        logging.info("[Agent → %s] %s", contact, reply)
+                        logging.info("[Agent → %s] %s", contact, safe_reply)
 
                 except Exception as e:
                     logging.exception("Error handling contact %s: %s", contact, e)
