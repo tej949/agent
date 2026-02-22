@@ -1,0 +1,100 @@
+WhatsApp Auto-Reply Agent
+A Python automation agent that watches WhatsApp Web and automatically replies to specific contacts (mom + friends) when you're busy — using Google Gemini AI to generate natural, human-like responses.
+
+💡 What It Does
+
+Opens WhatsApp Web using Selenium (Chrome)
+Watches for new messages from specified contacts only
+Uses Google Gemini AI to generate short, calm, context-aware replies
+Replies differently based on who messaged (mom vs friend)
+Prevents infinite reply loops (won't reply to its own messages)
+Won't reply to the same message twice
+
+
+🗂️ Project Structure
+agent/
+├── main.py           # Entry point — ties everything together, main loop
+├── whatsapp.py       # Selenium logic — opens browser, reads & sends messages
+├── ai.py             # Google Gemini API — generates human-like replies
+├── filters.py        # Safety checks — blocks unsafe or looping replies
+├── test_replies.py   # Test AI replies without opening browser
+├── .env              # Your API keys and config (never commit this!)
+├── .gitignore        # Ignores .env, venv, chrome_profile
+└── requirements.txt  # Python dependencies
+
+⚙️ Setup Instructions
+1. Clone the repo
+bashgit clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+cd YOUR_REPO_NAME
+2. Create and activate virtual environment
+bashpython -m venv venv
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # Mac/Linux
+3. Install dependencies
+bashpip install -r requirements.txt
+4. Get your Google Gemini API key
+
+Go to aistudio.google.com
+Click Get API Key → Create API Key
+It's completely free
+
+5. Create your .env file
+envGOOGLE_API_KEY=your_gemini_api_key_here
+MOM_CONTACT_NAME=Sujathamma
+FRIEND_CONTACT_NAME=Sharmishta
+CHECK_INTERVAL_SECONDS=15
+YOUR_NAME=Tej
+YOUR_AGE=20
+LANGUAGE_STYLE=casual Telugu-English mix
+
+🚀 Running the Agent
+Test AI replies first (no browser needed)
+bashpython test_replies.py
+Run the full agent
+bashpython main.py
+On first run, a Chrome window will open with WhatsApp Web. Scan the QR code with your phone:
+
+Open WhatsApp → tap three dots → Linked Devices → Link a Device
+Scan the QR code
+
+After the first scan, your session is saved in chrome_profile/ so you won't need to scan again.
+
+🧠 How the AI Works
+The agent uses Google Gemini 2.0 Flash with a custom system prompt tailored to each contact:
+For Mom :
+
+Replies in Tenglish (Telugu words in English script)
+Calm, loving, reassuring tone
+Examples: tinanu don't worry, class lo unna, sare le call chesta
+
+For Friend:
+
+Casual and friendly tone
+Natural Telugu-English mix
+
+The filters.py file validates every reply before sending — blocking replies that are too long, contain questions, or use inappropriate words.
+
+🔒 Safety Features
+
+Loop prevention — detects if the last message was sent by you and skips
+Duplicate detection — won't reply to the same message twice
+Safe fallback — if AI reply is unsafe or API fails, sends "phone was on silent <3"
+Contact filter — only replies to contacts listed in .env, ignores everyone else
+
+
+📦 Dependencies
+PackagePurposeseleniumControls Chrome browserwebdriver-managerAuto-downloads correct ChromeDrivergoogle-genaiGoogle Gemini AI APIpython-dotenvLoads .env config file
+
+🛠️ Built With
+
+Python 3.10+
+Selenium WebDriver
+Google Gemini 2.0 Flash API
+WhatsApp Web
+
+
+⚠️ Disclaimer
+This project uses WhatsApp Web via browser automation. Use responsibly and only for personal use. Automating WhatsApp messages may violate WhatsApp's Terms of Service — use at your own discretion.
+
+👩‍💻 Author
+Made by Tejomai V
